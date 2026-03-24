@@ -1,0 +1,606 @@
+/* ── Reset & Font ── */
+@font-face {
+  font-family: 'Cherri';
+  src: url('../fonts/Cherrihandwriting-Regular.ttf') format('truetype');
+}
+
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 156%;
+}
+
+body {
+  font-family: 'Cherri', 'Helvetica Neue', Arial, sans-serif;
+  background: #f5f0eb;
+  color: #1a1a1a;
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: opacity 0.25s ease;
+}
+
+a:hover {
+  opacity: 0.6;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ── Loading Overlay ── */
+.loading-overlay {
+  position: fixed;
+  inset: 0;
+  background: #f5f0eb;
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 0.8s ease, visibility 0.8s ease;
+}
+
+.loading-overlay.fade-out {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.loading-content {
+  text-align: center;
+  animation: overlayPulse 1.8s ease-in-out infinite;
+}
+
+.loading-title {
+  font-family: 'Cherri', cursive;
+  font-size: clamp(3.5rem, 10vw, 6rem);
+  color: #1a1a1a;
+  margin-bottom: 8px;
+  letter-spacing: 0.02em;
+  animation: overlayFadeIn 1s ease-out;
+}
+
+.loading-cherry {
+  animation: overlayFadeIn 1.2s ease-out;
+}
+
+.loading-cherry svg {
+  animation: cherryBounce 1.4s ease-in-out infinite;
+}
+
+@keyframes overlayFadeIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes overlayPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+@keyframes cherryBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+/* ── Navigation ── */
+.site-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  padding: 24px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: transform 0.35s ease, background 0.35s ease;
+}
+
+.site-nav.scrolled {
+  background: rgba(245, 240, 235, 0.95);
+  backdrop-filter: blur(10px);
+}
+
+.site-nav.hidden {
+  transform: translateY(-100%);
+}
+
+.nav-logo {
+  font-family: 'Cherri', cursive;
+  font-size: 1.6rem;
+  letter-spacing: 0.02em;
+  color: #1a1a1a;
+}
+
+.nav-links {
+  display: flex;
+  gap: 32px;
+  list-style: none;
+  align-items: center;
+}
+
+.nav-links a {
+  font-size: 0.95rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #1a1a1a;
+  position: relative;
+}
+
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: #1a1a1a;
+  transition: width 0.3s ease;
+}
+
+.nav-links a:hover::after,
+.nav-links a.active::after {
+  width: 100%;
+}
+
+.nav-links a:hover {
+  opacity: 1;
+}
+
+/* Hamburger */
+.nav-hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  z-index: 1001;
+  background: none;
+  border: none;
+  padding: 4px;
+}
+
+.nav-hamburger span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: #1a1a1a;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.nav-hamburger.open span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+.nav-hamburger.open span:nth-child(2) {
+  opacity: 0;
+}
+.nav-hamburger.open span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* Mobile nav overlay */
+.mobile-nav {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: #f5f0eb;
+  z-index: 999;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 28px;
+}
+
+.mobile-nav.open {
+  display: flex;
+}
+
+.mobile-nav a {
+  font-size: 1.8rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #1a1a1a;
+}
+
+/* ── Hero (Landing Page) ── */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 120px 40px 80px;
+  position: relative;
+}
+
+.hero-title {
+  font-family: 'Cherri', cursive;
+  font-size: clamp(3rem, 8vw, 7rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin-bottom: 24px;
+}
+
+.hero-artwork {
+  max-width: 420px;
+  width: 80%;
+  margin: 32px auto;
+  border-radius: 4px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+}
+
+.hero-subtitle {
+  font-size: 1.1rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #666;
+  margin-bottom: 24px;
+}
+
+.hero-cta {
+  display: inline-block;
+  padding: 14px 48px;
+  border: 2px solid #1a1a1a;
+  font-size: 0.9rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.hero-cta:hover {
+  background: #1a1a1a;
+  color: #f5f0eb;
+  opacity: 1;
+}
+
+/* ── Sections ── */
+.section {
+  padding: 100px 40px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.section-full {
+  padding: 100px 40px;
+  width: 100%;
+}
+
+.section-title {
+  font-family: 'Cherri', cursive;
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  margin-bottom: 48px;
+  text-align: center;
+  letter-spacing: 0.02em;
+}
+
+/* ── Latest Video Section (Home) ── */
+.video-embed {
+  position: relative;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto 24px;
+  aspect-ratio: 16 / 9;
+  background: #e0dbd5;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.video-embed iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* ── Spotify Embed (Home) ── */
+.spotify-section {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.spotify-section iframe {
+  border-radius: 12px;
+  width: 100%;
+}
+
+/* ── Listen Page — Platform Links ── */
+.platform-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 24px;
+  margin-top: 32px;
+}
+
+.platform-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 120px;
+  height: 120px;
+  border: 2px solid #1a1a1a;
+  border-radius: 8px;
+  transition: background 0.3s ease, color 0.3s ease, transform 0.2s ease;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  gap: 8px;
+}
+
+.platform-link i {
+  font-size: 2rem;
+}
+
+.platform-link:hover {
+  background: #1a1a1a;
+  color: #f5f0eb;
+  opacity: 1;
+  transform: translateY(-4px);
+}
+
+/* ── Watch Now Page — Video Grid ── */
+.video-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 32px;
+  margin-top: 32px;
+}
+
+.video-card {
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.video-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+}
+
+.video-card img {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+.video-card-title {
+  padding: 12px 0;
+  font-size: 0.9rem;
+  letter-spacing: 0.04em;
+}
+
+/* Featured video player */
+.featured-video {
+  max-width: 900px;
+  margin: 0 auto 48px;
+  aspect-ratio: 16 / 9;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.featured-video iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* ── Shows Page ── */
+.shows-list {
+  max-width: 700px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.show-item {
+  display: grid;
+  grid-template-columns: 120px 1fr auto;
+  align-items: center;
+  gap: 24px;
+  padding: 24px 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.show-date {
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #666;
+}
+
+.show-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.show-venue {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.show-location {
+  font-size: 0.85rem;
+  color: #888;
+}
+
+.show-tickets {
+  display: inline-block;
+  padding: 8px 24px;
+  border: 1.5px solid #1a1a1a;
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition: background 0.3s ease, color 0.3s ease;
+  white-space: nowrap;
+}
+
+.show-tickets:hover {
+  background: #1a1a1a;
+  color: #f5f0eb;
+  opacity: 1;
+}
+
+.no-shows {
+  text-align: center;
+  color: #888;
+  font-size: 1.1rem;
+  padding: 60px 0;
+  letter-spacing: 0.06em;
+}
+
+/* ── Footer ── */
+.site-footer {
+  padding: 60px 40px;
+  text-align: center;
+  border-top: 1px solid #ddd;
+}
+
+.footer-social {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  margin-bottom: 20px;
+}
+
+.footer-social a {
+  font-size: 1.3rem;
+  color: #1a1a1a;
+}
+
+.footer-text {
+  font-size: 0.8rem;
+  color: #999;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.footer-email {
+  margin-top: 8px;
+}
+
+.footer-email a {
+  font-size: 0.85rem;
+  color: #666;
+  text-decoration: underline;
+}
+
+/* ── Loading Spinner ── */
+.loader {
+  display: flex;
+  justify-content: center;
+  padding: 60px 0;
+}
+
+.loader-dot {
+  width: 8px;
+  height: 8px;
+  background: #aaa;
+  border-radius: 50%;
+  margin: 0 4px;
+  animation: pulse 1.2s ease-in-out infinite;
+}
+
+.loader-dot:nth-child(2) { animation-delay: 0.2s; }
+.loader-dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes pulse {
+  0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+  40% { transform: scale(1); opacity: 1; }
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .site-nav {
+    padding: 18px 24px;
+  }
+
+  .nav-links {
+    display: none;
+  }
+
+  .nav-hamburger {
+    display: flex;
+  }
+
+  .hero {
+    padding: 100px 24px 60px;
+  }
+
+  .hero-artwork {
+    max-width: 300px;
+    width: 85%;
+  }
+
+  .section,
+  .section-full {
+    padding: 60px 24px;
+  }
+
+  .show-item {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    padding: 20px 0;
+  }
+
+  .show-tickets {
+    justify-self: start;
+    margin-top: 8px;
+  }
+
+  .video-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .platform-link {
+    width: 100px;
+    height: 100px;
+    font-size: 0.65rem;
+  }
+
+  .platform-link i {
+    font-size: 1.6rem;
+  }
+
+  .section-title {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-title {
+    font-size: 2.5rem;
+  }
+
+  .hero-cta {
+    padding: 12px 36px;
+    font-size: 0.8rem;
+  }
+
+  .mobile-nav a {
+    font-size: 1.4rem;
+  }
+
+  .site-nav {
+    padding: 14px 18px;
+  }
+}
