@@ -1,64 +1,84 @@
 // ── YouTube Video Fetching ──
-// Replace YOUTUBE_API_KEY and PLAYLIST_ID with real values
+// Replace YOUR_YOUTUBE_API_KEY with a real YouTube Data API v3 key
 (function () {
-  var API_KEY = 'YOUR_YOUTUBE_API_KEY';
-  var PLAYLIST_IDS = [
-    'PLAYLIST_ID_1'
-    // Add more playlist IDs as needed
-  ];
-  var MAX_RESULTS = 20;
+  var API_KEY = 'AIzaSyD97_O89-D8OkqrG66ogYcLHdP0okZQZ7E';
+  var CHANNEL_HANDLE = 'CHERRImusicofficial';
+  var MAX_RESULTS = 25;
 
   var grid = document.getElementById('videoGrid');
   var loader = document.getElementById('videoLoader');
   var player = document.getElementById('featured-player');
   var homeVideo = document.getElementById('home-video');
 
-  // If we're on the watch page
+  // Watch page — full gallery
   if (grid) {
-    fetchAllVideos();
+    fetchChannelVideos();
   }
 
-  // If we're on the home page, just load the latest video
+  // Home page — latest video only
   if (homeVideo && !grid) {
     fetchLatestForHome();
   }
 
-  async function fetchAllVideos() {
-    try {
-      var allItems = [];
-      for (var i = 0; i < PLAYLIST_IDS.length; i++) {
-        var items = await fetchPlaylist(PLAYLIST_IDS[i]);
-        allItems = allItems.concat(items);
-      }
+  async function resolveChannelId() {
+    var url = 'https://www.googleapis.com/youtube/v3/channels?part=contentDetails' +
+      '&forHandle=' + encodeURIComponent(CHANNEL_HANDLE) +
+      '&key=' + encodeURIComponent(API_KEY);
+    var resp = await fetch(url);
+    var data = await resp.json();
+    if (!data.items || data.items.length === 0) return null;
+    return data.items[0].contentDetails.relatedPlaylists.uploads;
+  }
 
-      // Deduplicate by video ID
-      var seen = {};
-      var unique = [];
-      allItems.forEach(function (item) {
-        var vid = item.snippet.resourceId.videoId;
-        if (!seen[vid]) {
-          seen[vid] = true;
-          unique.push(item);
-        }
-      });
+  async function fetchUploads(uploadsPlaylistId, maxResults) {
+    var items = [];
+    var nextPageToken = '';
+    var limit = maxResults || MAX_RESULTS;
+
+    while (items.length < limit) {
+      var perPage = Math.min(50, limit - items.length);
+      var url = 'https://www.googleapis.com/youtube/v3/playlistItems?part=snippet' +
+        '&playlistId=' + encodeURIComponent(uploadsPlaylistId) +
+        '&maxResults=' + perPage +
+        '&key=' + encodeURIComponent(API_KEY);
+      if (nextPageToken) url += '&pageToken=' + encodeURIComponent(nextPageToken);
+
+      var resp = await fetch(url);
+      var data = await resp.json();
+      if (!data.items) break;
+      items = items.concat(data.items);
+      nextPageToken = data.nextPageToken;
+      if (!nextPageToken) break;
+    }
+
+    return items;
+  }
+
+  async function fetchChannelVideos() {
+    try {
+      var uploadsId = await resolveChannelId();
+      if (!uploadsId) throw new Error('Channel not found');
+
+      var items = await fetchUploads(uploadsId, MAX_RESULTS);
 
       if (loader) loader.style.display = 'none';
 
-      if (unique.length === 0) {
+      if (items.length === 0) {
         grid.innerHTML = '<p style="text-align:center;color:#888;">No videos found.</p>';
         return;
       }
 
-      // Set featured player to first video
+      // Featured player — most recent video
       if (player) {
-        player.src = 'https://www.youtube.com/embed/' + unique[0].snippet.resourceId.videoId;
+        player.src = 'https://www.youtube.com/embed/' + items[0].snippet.resourceId.videoId;
       }
 
-      // Build grid
-      unique.forEach(function (item) {
+      // Build gallery grid (already ordered most-recent-first from uploads playlist)
+      items.forEach(function (item) {
         var vid = item.snippet.resourceId.videoId;
         var title = item.snippet.title;
-        var thumb = (item.snippet.thumbnails.high || item.snippet.thumbnails.medium || item.snippet.thumbnails.default).url;
+        var thumbs = item.snippet.thumbnails;
+        var thumb = (thumbs.high || thumbs.medium || thumbs.default).url;
 
         var card = document.createElement('div');
         card.className = 'video-card';
@@ -83,24 +103,14 @@
 
   async function fetchLatestForHome() {
     try {
-      if (PLAYLIST_IDS.length === 0) return;
-      var items = await fetchPlaylist(PLAYLIST_IDS[0], 1);
+      var uploadsId = await resolveChannelId();
+      if (!uploadsId) return;
+      var items = await fetchUploads(uploadsId, 1);
       if (items.length > 0) {
         homeVideo.src = 'https://www.youtube.com/embed/' + items[0].snippet.resourceId.videoId;
       }
     } catch (e) {
       // Silently fail on home page
     }
-  }
-
-  async function fetchPlaylist(playlistId, maxResults) {
-    var limit = maxResults || MAX_RESULTS;
-    var url = 'https://www.googleapis.com/youtube/v3/playlistItems?part=snippet' +
-      '&playlistId=' + encodeURIComponent(playlistId) +
-      '&maxResults=' + limit +
-      '&key=' + encodeURIComponent(API_KEY);
-    var resp = await fetch(url);
-    var data = await resp.json();
-    return data.items || [];
   }
 })();

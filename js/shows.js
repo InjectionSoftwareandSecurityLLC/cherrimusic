@@ -2,7 +2,7 @@
 // Replace ARTIST_NAME with the actual Bandsintown artist name
 (function () {
   var APP_ID = 'YOUR_BANDSINTOWN_APP_ID';
-  var ARTIST_NAME = 'Cherri';
+  var ARTIST_NAME = 'CHERRI';
 
   var list = document.getElementById('showsList');
   var loader = document.getElementById('showLoader');
