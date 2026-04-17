@@ -15,8 +15,6 @@
   async function fetchShows() {
     try {
       var resp = await fetch(API_URL);
-
-      var resp = await fetch(url);
       var events = await resp.json();
 
       if (loader) loader.style.display = 'none';
