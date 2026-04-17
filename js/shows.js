@@ -1,8 +1,9 @@
 // ── Bandsintown Shows Fetching ──
-// Replace ARTIST_NAME with the actual Bandsintown artist name
 (function () {
-  var APP_ID = 'YOUR_BANDSINTOWN_APP_ID';
   var ARTIST_NAME = 'CHERRI';
+  var API_URL = 'https://rest.bandsintown.com/artists/' +
+    encodeURIComponent(ARTIST_NAME) +
+    '/events?app_id=26113258b4b0ab3265bf61cdb27edeab';
 
   var list = document.getElementById('showsList');
   var loader = document.getElementById('showLoader');
@@ -13,9 +14,7 @@
 
   async function fetchShows() {
     try {
-      var url = 'https://rest.bandsintown.com/artists/' +
-        encodeURIComponent(ARTIST_NAME) +
-        '/events?app_id=' + encodeURIComponent(APP_ID);
+      var resp = await fetch(API_URL);
 
       var resp = await fetch(url);
       var events = await resp.json();
