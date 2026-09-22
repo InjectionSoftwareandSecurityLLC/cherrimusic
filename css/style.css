@@ -257,7 +257,7 @@ img {
   position: relative;
   max-width: 1100px;
   margin: 0 auto;
-  padding: 190px 24px 330px;
+  padding: 190px 24px 240px;
   text-align: center;
 }
 
@@ -270,15 +270,16 @@ img {
   width: 100%;
 }
 
-/* Left sits high enough for the logo to lap over it; right drops clear below the logo */
+/* Left sits high enough for the logo to lap over it; right drops into the section gap */
 .wall-photo {
+  --flank-w: clamp(175px, 18vw, 265px);
   position: absolute;
   z-index: -1;
-  width: clamp(175px, 18vw, 265px);
+  width: var(--flank-w);
 }
 
 .wall-photo--left { left: 24px; top: 104px; }
-.wall-photo--right { right: 24px; top: 448px; }
+.wall-photo--right { right: 24px; }
 
 /* ── Flanking Photo Wall (Home) ── */
 .flanked {
@@ -297,6 +298,11 @@ img {
 }
 
 .flank--right {
+  display: none;
+}
+
+/* Closing photo after the last section; desktop only, so mobile keeps one photo per section */
+.photo-tail {
   display: none;
 }
 
@@ -332,22 +338,49 @@ img {
   .wall-photo--right {
     display: none;
   }
+
+  /* Only the first photo of a section shows on mobile */
+  .flank--left ~ .flank--left {
+    display: none;
+  }
 }
 
 @media (min-width: 1000px) {
   /* Desktop pattern: every section carries the same pair, at the same offsets */
   .flank--left { --flank-y: 22%; }
-  .flank--right { --flank-y: 50%; }
+
+  .photo-tail {
+    display: block;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 24px 130px;
+  }
+
+  /* Paired with :hover so the later .polaroid--pin:hover rule can't reset it to width:100% */
+  .photo-tail .polaroid--pin,
+  .photo-tail .polaroid--pin:hover {
+    width: clamp(175px, 18vw, 265px);
+    max-width: none;
+  }
 
   .flank,
   .flank--right {
+    --flank-w: clamp(175px, 18vw, 265px);
     display: block;
     position: absolute;
     z-index: -1;
     top: var(--flank-y);
-    width: clamp(175px, 18vw, 265px);
+    width: var(--flank-w);
     max-width: none;
     margin: 0;
+  }
+
+  /* Card height is its width plus the frame, so half of that centres it on the
+     section's bottom edge and drops it into the gap between sections. */
+  .flank--right,
+  .wall-photo--right {
+    top: auto;
+    bottom: calc((var(--flank-w) + 22px) / -2);
   }
 
   /* Both anchors resolve to the same x: sections are already the 1100px band,
@@ -752,16 +785,6 @@ body.wall-texture {
   margin: 0 auto;
 }
 
-.polaroid-photo-ph {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: rgba(26,26,26,0.22);
-  font-size: 1.6rem;
-}
-
 /* Sticky note variant */
 .sticky-note {
   --curl: 30px;
@@ -940,11 +963,6 @@ body.wall-texture {
   }
 
   .hero-artwork {
-    max-width: 300px;
-    width: 85%;
-  }
-
-  .hero .polaroid {
     max-width: 300px;
     width: 85%;
   }
