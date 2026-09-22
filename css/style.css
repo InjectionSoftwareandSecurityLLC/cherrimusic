@@ -6,9 +6,6 @@
 
 :root {
   --wall-base: #efe8df;
-  --wall-image:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.3'/%3E%3C/svg%3E"),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='500' height='500'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.015 0.017' numOctaves='4' seed='11' stitchTiles='stitch' result='t'/%3E%3CfeDiffuseLighting in='t' lighting-color='%23ffffff' surfaceScale='2.5'%3E%3CfeDistantLight azimuth='235' elevation='60'/%3E%3C/feDiffuseLighting%3E%3C/filter%3E%3Crect width='500' height='500' filter='url(%23p)'/%3E%3C/svg%3E");
 }
 
 *, *::before, *::after {
@@ -761,19 +758,24 @@ img {
   /* Injected into .shows-grid, so it has to span the tracks to centre on the page */
   grid-column: 1 / -1;
   text-align: center;
-  color: #888;
+  color: #554b43;
   font-size: 1.1rem;
   padding: 60px 0;
   letter-spacing: 0.06em;
 }
 
 /* ── Wall Spackle Texture ── */
+/* Photo isn't seamless, so it covers the viewport once rather than tiling.
+   The cream wash tints the cool grey concrete back to the original wall tone. */
 body.wall-texture {
   background-color: var(--wall-base);
-  background-image: var(--wall-image);
-  background-size: 300px 300px, 500px 500px;
-  background-blend-mode: overlay, multiply;
-  background-attachment: fixed;
+  background-image:
+    linear-gradient(rgba(253, 240, 224, 0.55), rgba(253, 240, 224, 0.55)),
+    url('../img/wall-texture.jpg');
+  background-size: auto, cover;
+  background-position: center, center;
+  background-repeat: repeat, no-repeat;
+  background-attachment: fixed, fixed;
 }
 
 /* ── Shows Grid ── */
@@ -888,7 +890,7 @@ body.wall-texture {
 .site-footer {
   padding: 60px 40px;
   text-align: center;
-  border-top: 1px solid #ddd;
+  border-top: 1px solid rgba(74, 63, 54, 0.28);
 }
 
 .footer-social {
@@ -905,7 +907,7 @@ body.wall-texture {
 
 .footer-text {
   font-size: 0.8rem;
-  color: #999;
+  color: #554b43;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
@@ -916,7 +918,7 @@ body.wall-texture {
 
 .footer-email a {
   font-size: 0.85rem;
-  color: #666;
+  color: #4e453d;
   text-decoration: underline;
 }
 
