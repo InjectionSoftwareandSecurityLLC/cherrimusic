@@ -5,44 +5,6 @@ window.CherriShows = (function () {
     encodeURIComponent(ARTIST_NAME) +
     '/events?app_id=26113258b4b0ab3265bf61cdb27edeab';
 
-  // Placeholder data used only when Bandsintown returns nothing. Set to false to go live-only.
-  var USE_MOCK_FALLBACK = true;
-
-  var MOCK_EVENTS = [
-    {
-      id: 'mock-1',
-      url: 'https://www.bandsintown.com/',
-      datetime: '2026-09-19T20:00:00',
-      title: '',
-      venue: { name: 'The Echo', city: 'Los Angeles', region: 'CA', country: 'United States' },
-      lineup: ['CHERRI']
-    },
-    {
-      id: 'mock-2',
-      url: 'https://www.bandsintown.com/',
-      datetime: '2026-10-03T21:00:00',
-      title: '',
-      venue: { name: 'Bottom of the Hill', city: 'San Francisco', region: 'CA', country: 'United States' },
-      lineup: ['CHERRI']
-    },
-    {
-      id: 'mock-3',
-      url: 'https://www.bandsintown.com/',
-      datetime: '2026-10-24T19:30:00',
-      title: '',
-      venue: { name: 'Baby\u2019s All Right', city: 'Brooklyn', region: 'NY', country: 'United States' },
-      lineup: ['CHERRI']
-    },
-    {
-      id: 'mock-4',
-      url: 'https://www.bandsintown.com/',
-      datetime: '2026-11-08T20:00:00',
-      title: '',
-      venue: { name: 'Empty Bottle', city: 'Chicago', region: 'IL', country: 'United States' },
-      lineup: ['CHERRI']
-    }
-  ];
-
   function normalize(events) {
     if (!Array.isArray(events)) return [];
     return events
@@ -51,15 +13,12 @@ window.CherriShows = (function () {
   }
 
   async function fetchEvents() {
-    var events = [];
     try {
       var resp = await fetch(API_URL);
-      events = normalize(await resp.json());
+      return normalize(await resp.json());
     } catch (err) {
-      events = [];
+      return [];
     }
-    if (events.length === 0 && USE_MOCK_FALLBACK) events = normalize(MOCK_EVENTS);
-    return events;
   }
 
   function formatDate(datetime, opts) {

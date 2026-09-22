@@ -90,38 +90,19 @@
     </div>
   </section>
 
-  <!-- Upcoming Show, Option A: polaroid (revealed only when Bandsintown returns an event) -->
+  <!-- Upcoming Show (revealed only when Bandsintown returns an event) -->
   <section class="hero hero-show flanked upcoming-show" id="upcomingShow">
-    <div class="flank flank--left" style="--flank-y: 40%; --flank-y-sm: 18%;" aria-hidden="true">
+    <div class="flank flank--left" aria-hidden="true">
+      <div class="polaroid polaroid--pin" style="--tilt: -6deg; --tape-tilt: 5deg; --tape-x: 45%;">
+        <div class="polaroid-photo"><div class="polaroid-photo-ph"><i class="fas fa-camera"></i></div></div>
+      </div>
+    </div>
+    <div class="flank flank--right" aria-hidden="true">
       <div class="polaroid polaroid--pin" style="--tilt: 5deg; --tape-tilt: -6deg; --tape-x: 55%;">
         <div class="polaroid-photo"><div class="polaroid-photo-ph"><i class="fas fa-camera"></i></div></div>
       </div>
     </div>
 
-    <p class="style-label">Option A &mdash; Polaroid</p>
-    <h1>Upcoming Show</h1>
-    <a class="polaroid" data-show-link href="#" target="_blank" rel="noopener noreferrer">
-      <div class="polaroid-photo">
-        <img src="https://placehold.co/600x600/1a1a1a/f5f0eb?text=CHERRI" alt="Upcoming show">
-      </div>
-      <div class="polaroid-caption">
-        <span class="polaroid-date" data-show-date></span>
-        <span class="polaroid-venue" data-show-venue></span>
-        <span class="polaroid-location" data-show-location></span>
-      </div>
-    </a>
-    <a class="hero-cta" data-show-link href="#" target="_blank" rel="noopener noreferrer">Get Tickets</a>
-  </section>
-
-  <!-- Upcoming Show, Option B: sticky note -->
-  <section class="hero hero-show flanked upcoming-show" id="upcomingShowSticky">
-    <div class="flank flank--right" style="--flank-y: 40%; --flank-y-sm: 18%;" aria-hidden="true">
-      <div class="polaroid polaroid--pin" style="--tilt: -5.5deg; --tape-tilt: 6deg; --tape-x: 46%;">
-        <div class="polaroid-photo"><div class="polaroid-photo-ph"><i class="fas fa-camera"></i></div></div>
-      </div>
-    </div>
-
-    <p class="style-label">Option B &mdash; Sticky Note</p>
     <h1>Upcoming Show</h1>
     <a class="sticky-note sticky-note--lg" data-show-link href="#" target="_blank" rel="noopener noreferrer"
        style="--note-color: #ffe14d; --tilt: -2.4deg;">
@@ -134,44 +115,30 @@
 
   <!-- Hero / Latest Release -->
   <section class="hero flanked">
-    <div class="flank flank--right" style="--flank-y: 38%; --flank-y-sm: 24%;" aria-hidden="true">
+    <div class="flank flank--left" aria-hidden="true">
+      <div class="polaroid polaroid--pin" style="--tilt: -4.5deg; --tape-tilt: 6deg; --tape-x: 45%;">
+        <div class="polaroid-photo"><div class="polaroid-photo-ph"><i class="fas fa-camera"></i></div></div>
+      </div>
+    </div>
+    <div class="flank flank--right" aria-hidden="true">
       <div class="polaroid polaroid--pin" style="--tilt: 4deg; --tape-tilt: -7deg; --tape-x: 60%;">
         <div class="polaroid-photo"><div class="polaroid-photo-ph"><i class="fas fa-camera"></i></div></div>
       </div>
     </div>
 
     <h1>Latest Release</h1>
-    <!-- Swap for <img class="hero-artwork" src="..." alt="Latest Release Artwork"> once real art exists -->
-    <div class="hero-artwork art-placeholder" role="img" aria-label="Latest release artwork placeholder">
-      <i class="fas fa-compact-disc"></i>
-      <span class="art-placeholder-label">Album Art</span>
-      <span class="art-placeholder-dims">3000 &times; 3000</span>
-    </div>
+    <img class="hero-artwork" src="img/come-around.jpg" alt="Come Around album artwork" width="640" height="640">
     <a class="hero-cta" href="#" target="_blank">Listen Now</a>
-  </section>
-
-  <!-- Latest Video -->
-  <section class="section flanked">
-    <div class="flank flank--left" style="--flank-y: 42%; --flank-y-sm: 14%;" aria-hidden="true">
-      <div class="polaroid polaroid--pin" style="--tilt: 5deg; --tape-tilt: -4deg; --tape-x: 56%;">
-        <div class="polaroid-photo"><div class="polaroid-photo-ph"><i class="fas fa-camera"></i></div></div>
-      </div>
-    </div>
-
-    <h2 class="section-title">Latest Video</h2>
-    <div class="video-embed">
-      <iframe id="home-video" src="" title="Latest Video"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowfullscreen></iframe>
-    </div>
-    <div style="text-align:center; margin-top:16px;">
-      <a href="watch.html" class="hero-cta" style="font-size:0.8rem; padding:10px 32px;">Watch More</a>
-    </div>
   </section>
 
   <!-- Top Songs -->
   <section class="section flanked">
-    <div class="flank flank--right" style="--flank-y: 54%; --flank-y-sm: 16%;" aria-hidden="true">
+    <div class="flank flank--left" aria-hidden="true">
+      <div class="polaroid polaroid--pin" style="--tilt: -5.5deg; --tape-tilt: 7deg; --tape-x: 48%;">
+        <div class="polaroid-photo"><div class="polaroid-photo-ph"><i class="fas fa-camera"></i></div></div>
+      </div>
+    </div>
+    <div class="flank flank--right" aria-hidden="true">
       <div class="polaroid polaroid--pin" style="--tilt: 7deg; --tape-tilt: -5deg; --tape-x: 43%;">
         <div class="polaroid-photo"><div class="polaroid-photo-ph"><i class="fas fa-camera"></i></div></div>
       </div>
@@ -202,7 +169,6 @@
   </footer>
 
   <script src="js/main.js"></script>
-  <script src="js/videos.js"></script>
   <script src="js/shows-data.js"></script>
   <script src="js/upcoming.js"></script>
 </body>

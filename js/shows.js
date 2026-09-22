@@ -10,6 +10,8 @@
     '#ffb26b', '#c9a5ff', '#d7f26a', '#ff7f7f'
   ];
 
+  var FIRST_NOTE_COLOR = '#ffe14d';
+
   // Draws from a reshuffled pool so colors stay random but never repeat back to back.
   var colorPool = [];
   var lastColor = null;
@@ -21,6 +23,15 @@
     }
     lastColor = colorPool.shift();
     return lastColor;
+  }
+
+  // Events arrive sorted, so index 0 is the soonest show and always gets the yellow note.
+  function colorFor(index) {
+    if (index === 0) {
+      lastColor = FIRST_NOTE_COLOR;
+      return FIRST_NOTE_COLOR;
+    }
+    return nextColor();
   }
 
   window.CherriShows.fetchEvents().then(function (events) {
@@ -57,7 +68,7 @@
     a.target = '_blank';
     a.rel = 'noopener noreferrer';
     a.style.setProperty('--tilt', tiltFor(index));
-    a.style.setProperty('--note-color', nextColor());
+    a.style.setProperty('--note-color', colorFor(index));
 
     a.appendChild(el('span', 'sticky-date', date));
     a.appendChild(el('span', 'sticky-venue', evt.venue.name));

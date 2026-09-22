@@ -254,33 +254,31 @@ img {
 
 /* ── Logo Wall (Home) ── */
 .logo-wall {
-  display: grid;
-  grid-template-columns: 1fr minmax(0, 2.1fr) 1fr;
-  align-items: center;
-  gap: 48px;
+  position: relative;
   max-width: 1100px;
   margin: 0 auto;
-  padding: 190px 24px 90px;
+  padding: 190px 24px 330px;
+  text-align: center;
 }
 
 .logo-wall-title {
-  justify-self: center;
-  width: 100%;
+  width: min(66%, 640px);
+  margin: 0 auto;
 }
 
 .logo-wall-title .logo-mark {
   width: 100%;
 }
 
+/* Left sits high enough for the logo to lap over it; right drops clear below the logo */
 .wall-photo {
-  justify-self: center;
-  width: 100%;
-  max-width: 210px;
+  position: absolute;
+  z-index: -1;
+  width: clamp(175px, 18vw, 265px);
 }
 
-/* Share the 24px margin line used by the flank column below */
-.wall-photo--left { margin-top: -46px; justify-self: start; }
-.wall-photo--right { margin-top: 54px; justify-self: end; }
+.wall-photo--left { left: 24px; top: 104px; }
+.wall-photo--right { right: 24px; top: 448px; }
 
 /* ── Flanking Photo Wall (Home) ── */
 .flanked {
@@ -288,22 +286,68 @@ img {
   overflow-x: clip;
 }
 
-/* Below the gutter breakpoint the photos sit a layer behind the content.
-   --flank-y-sm lets each one dodge the opaque content there so its tape stays visible. */
+/* Mobile pattern: one centred photo in the flow at the end of every section,
+   matching the logo wall. The right-hand photo of each pair is desktop only. */
 .flank {
-  position: absolute;
-  z-index: -1;
-  top: var(--flank-y-sm, var(--flank-y, 20%));
-  width: clamp(128px, 38vw, 180px);
+  order: 1;
+  align-self: center;
+  width: 54vw;
+  max-width: 230px;
+  margin: 40px auto 0;
 }
 
-.flank--left { left: -32px; }
-.flank--right { right: -32px; }
+.flank--right {
+  display: none;
+}
+
+/* .section is block-level, so it needs to be flex for the photo's order to apply */
+@media (max-width: 999px) {
+  .section.flanked {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Logo wall follows the same one-centred-photo pattern */
+  .logo-wall {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 150px 24px 70px;
+  }
+
+  .logo-wall-title {
+    order: -1;
+    width: 100%;
+    max-width: 360px;
+    margin: 0 auto;
+  }
+
+  .wall-photo {
+    position: static;
+    width: 54vw;
+    max-width: 230px;
+    margin: 40px auto 0;
+  }
+
+  .wall-photo--right {
+    display: none;
+  }
+}
 
 @media (min-width: 1000px) {
-  .flank {
-    top: var(--flank-y, 20%);
-    width: clamp(130px, 12vw, 190px);
+  /* Desktop pattern: every section carries the same pair, at the same offsets */
+  .flank--left { --flank-y: 22%; }
+  .flank--right { --flank-y: 50%; }
+
+  .flank,
+  .flank--right {
+    display: block;
+    position: absolute;
+    z-index: -1;
+    top: var(--flank-y);
+    width: clamp(175px, 18vw, 265px);
+    max-width: none;
+    margin: 0;
   }
 
   /* Both anchors resolve to the same x: sections are already the 1100px band,
@@ -313,10 +357,11 @@ img {
   .hero.flanked .flank--left { left: max(24px, calc(50% - 526px)); }
   .hero.flanked .flank--right { right: max(24px, calc(50% - 526px)); }
 
+  /* Wide enough that content only laps a photo where the content itself is full-width */
   .hero.flanked,
   .section.flanked {
-    padding-left: clamp(180px, 17vw, 250px);
-    padding-right: clamp(180px, 17vw, 250px);
+    padding-left: clamp(150px, 15vw, 230px);
+    padding-right: clamp(150px, 15vw, 230px);
   }
 }
 
@@ -344,39 +389,10 @@ img {
   max-width: 420px;
   width: 80%;
   aspect-ratio: 1 / 1;
+  object-fit: cover;
   margin: 32px auto;
   border-radius: 4px;
   box-shadow: 0 20px 60px rgba(0,0,0,0.1);
-}
-
-.art-placeholder {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  color: #f5f0eb;
-  background:
-    repeating-linear-gradient(45deg, rgba(255,255,255,0.035) 0 14px, transparent 14px 28px),
-    #1a1a1a;
-  border: 2px dashed rgba(245,240,235,0.3);
-}
-
-.art-placeholder i {
-  font-size: 2.4rem;
-  opacity: 0.5;
-}
-
-.art-placeholder-label {
-  font-size: 0.95rem;
-  letter-spacing: 0.24em;
-  text-transform: uppercase;
-}
-
-.art-placeholder-dims {
-  font-size: 0.7rem;
-  letter-spacing: 0.18em;
-  color: rgba(245, 240, 235, 0.5);
 }
 
 .hero-subtitle {
@@ -709,6 +725,8 @@ img {
 }
 
 .no-shows {
+  /* Injected into .shows-grid, so it has to span the tracks to centre on the page */
+  grid-column: 1 / -1;
   text-align: center;
   color: #888;
   font-size: 1.1rem;
@@ -754,7 +772,8 @@ body.wall-texture {
   align-items: center;
   gap: 3px;
   aspect-ratio: 1 / 1;
-  padding: 20px 16px;
+  /* Bottom padding clears the peeled corner so long venue names never run under it */
+  padding: 20px 16px calc(var(--curl) + 6px);
   background: var(--note-color, #ffe14d);
   color: #23303d;
   font-family: 'Permanent Marker', 'Cherri', cursive;
@@ -827,7 +846,7 @@ body.wall-texture {
   max-width: 420px;
   width: 80%;
   margin: 32px auto;
-  padding: 34px 30px;
+  padding: 34px 30px calc(var(--curl) + 12px);
   gap: 8px;
   box-shadow: 0 18px 44px rgba(0,0,0,0.18);
 }
@@ -841,16 +860,6 @@ body.wall-texture {
 .sticky-note--lg .sticky-date { font-size: 1.75rem; }
 .sticky-note--lg .sticky-venue { font-size: 1.05rem; }
 .sticky-note--lg .sticky-location { font-size: 0.8rem; }
-
-/* Mockup heading marking the two Upcoming Show options */
-.style-label {
-  text-align: center;
-  text-transform: uppercase;
-  letter-spacing: 0.22em;
-  font-size: 0.72rem;
-  color: #8a8079;
-  margin-bottom: 10px;
-}
 
 /* ── Footer ── */
 .site-footer {
@@ -930,38 +939,6 @@ body.wall-texture {
     padding: 100px 24px 60px;
   }
 
-  .logo-wall {
-    display: block;
-    position: relative;
-    overflow-x: clip;
-    padding: 150px 24px 90px;
-  }
-
-  .logo-wall-title {
-    max-width: 360px;
-    margin: 0 auto;
-  }
-
-  /* Same underlay treatment as the flanks, tucked below the logo */
-  .wall-photo {
-    position: absolute;
-    z-index: -1;
-    width: clamp(128px, 38vw, 180px);
-    max-width: none;
-  }
-
-  .wall-photo--left {
-    left: -32px;
-    top: 30%;
-    margin-top: 0;
-  }
-
-  .wall-photo--right {
-    right: -32px;
-    top: 40%;
-    margin-top: 0;
-  }
-
   .hero-artwork {
     max-width: 300px;
     width: 85%;
@@ -975,7 +952,13 @@ body.wall-texture {
   .hero .sticky-note--lg {
     max-width: 300px;
     width: 85%;
+    --curl: 40px;
+    padding: 26px 20px calc(var(--curl) + 8px);
   }
+
+  .sticky-note--lg .sticky-date { font-size: 1.3rem; }
+  .sticky-note--lg .sticky-venue { font-size: 0.85rem; }
+  .sticky-note--lg .sticky-location { font-size: 0.7rem; }
 
   .section,
   .section-full {
